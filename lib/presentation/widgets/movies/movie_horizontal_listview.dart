@@ -3,13 +3,13 @@ import 'package:cinemapedia/config/helpers/human_formats.dart';
 import 'package:flutter/material.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 
-class MovieHorizintalListview extends StatefulWidget {
+class MovieHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
   final String? title;
   final String? subTitle;
   final VoidCallback? loadNextPage;
 
-  const MovieHorizintalListview({
+  const MovieHorizontalListview({
     super.key,
     required this.movies,
     this.title,
@@ -18,11 +18,11 @@ class MovieHorizintalListview extends StatefulWidget {
   });
 
   @override
-  State<MovieHorizintalListview> createState() =>
-      _MovieHorizintalListviewState();
+  State<MovieHorizontalListview> createState() =>
+      _MovieHorizontalListviewState();
 }
 
-class _MovieHorizintalListviewState extends State<MovieHorizintalListview> {
+class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
   final scrollController = ScrollController();
 
   @override
