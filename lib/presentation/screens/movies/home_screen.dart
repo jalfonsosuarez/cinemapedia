@@ -29,30 +29,35 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   void initState() {
     super.initState();
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(upCommingMoviesProvider.notifier).loadNextPage();
+    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
   }
 
   @override
   Widget build(BuildContext context) {
+    final initialLoading = ref.watch(initialLoadingProvider);
+    if (initialLoading) return const FullScreenLoader();
 
-    final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
+    final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final popularMovies = ref.watch(popularMoviesProvider);
+    final upCommingMovies = ref.watch(upCommingMoviesProvider);
+    final topRatedMovies = ref.watch(topRatedMoviesProvider);
 
     return CustomScrollView(
       slivers: [
-
         const SliverAppBar(
           floating: true,
-          flexibleSpace: FlexibleSpaceBar(
-            title: CustomAppBar(),
-          ),
+          flexibleSpace: FlexibleSpaceBar(title: CustomAppBar()),
         ),
 
-        SliverList(delegate: SliverChildBuilderDelegate(
-          (context, index) {
+        SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
             return Column(
               children: [
                 MoviesSlideshow(movies: slideShowMovies),
-            
+
                 MovieHorizontalListview(
                   movies: nowPlayingMovies,
                   title: 'En cines',
@@ -61,40 +66,39 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
                   },
                 ),
-            
+
                 MovieHorizontalListview(
-                  movies: nowPlayingMovies,
+                  movies: upCommingMovies,
                   title: 'Proximamente',
                   subTitle: 'Este mes',
                   loadNextPage: () {
-                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-                  },
-                ),
-            
-                MovieHorizontalListview(
-                  movies: nowPlayingMovies,
-                  title: 'Populares',
-                  // subTitle: 'Viernes 14',
-                  loadNextPage: () {
-                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-                  },
-                ),
-            
-                MovieHorizontalListview(
-                  movies: nowPlayingMovies,
-                  title: 'Mejor calificadas',
-                  subTitle: 'Desde siempre',
-                  loadNextPage: () {
-                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                    ref.read(upCommingMoviesProvider.notifier).loadNextPage();
                   },
                 ),
 
-                SizedBox(height: 50,)
+                MovieHorizontalListview(
+                  movies: popularMovies,
+                  title: 'Populares',
+                  // subTitle: 'Viernes 14',
+                  loadNextPage: () {
+                    ref.read(popularMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+
+                MovieHorizontalListview(
+                  movies: topRatedMovies,
+                  title: 'Mejor calificadas',
+                  subTitle: 'Desde siempre',
+                  loadNextPage: () {
+                    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+
+                SizedBox(height: 50),
               ],
             );
-          },
-          childCount: 1,
-        )),
+          }, childCount: 1),
+        ),
       ],
     );
   }
